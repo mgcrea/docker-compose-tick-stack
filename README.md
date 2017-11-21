@@ -1,4 +1,5 @@
-# Compose file for the TICK stack: Telegraf, InfluxDB, Chronograf, Kapacitor
+# Compose file for the TICK stack!
+## Telegraf, InfluxDB, Chronograf, Kapacitor
 
 [![License](https://img.shields.io/github/license/mgcrea/docker-compose-tick-stack.svg?style=flat)](https://tldrlegal.com/license/mit-license)
 [![Docker Stars](https://img.shields.io/docker/stars/_/influxdb.svg)](https://registry.hub.docker.com/u/_/influxdb/)
