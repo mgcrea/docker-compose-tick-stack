@@ -1,3 +1,4 @@
 volumes/
 .idea/
 .env
+.remote-sync.json
