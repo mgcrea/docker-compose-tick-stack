@@ -3,10 +3,8 @@ source .env
 
 echo "Building \"telegraf.conf\" via envsubst"
 envsubst < templates/telegraf.conf > "volumes/config/telegraf.conf"
-
 echo "Building \"influxdb.conf\" via envsubst"
 envsubst < templates/influxdb.conf > "volumes/config/influxdb.conf"
-
 echo "Building \"kapacitor.conf\" via envsubst"
 envsubst < templates/kapacitor.conf > "volumes/config/kapacitor.conf"
 

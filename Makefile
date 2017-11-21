@@ -1,8 +1,7 @@
 all: build
 
-bash:
-	@source .env
-	@docker run --rm --net=host -it influxdb:${INFLUXDB_VERSION} /bin/sh
+exec:
+	@docker-compose exec influxdb /bin/sh
 
 pull:
 	@bash scripts/pull.sh
