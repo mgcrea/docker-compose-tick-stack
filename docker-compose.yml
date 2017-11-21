@@ -9,7 +9,9 @@ services:
       - ./volumes/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     depends_on:
       - influxdb
-    network_mode: "service:influxdb"
+    networks:
+      - influxdb
+      - nginx_proxy
 
   influxdb:
     image: influxdb:${INFLUXDB_VERSION}

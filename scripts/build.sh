@@ -20,4 +20,7 @@ if [[ -v INFLUXDB_WRITE_USER ]]; then ENV_VARS="${ENV_VARS} -e INFLUXDB_WRITE_US
 if [[ -v INFLUXDB_WRITE_USER_PASSWORD ]]; then ENV_VARS="${ENV_VARS} -e INFLUXDB_WRITE_USER_PASSWORD=${INFLUXDB_WRITE_USER_PASSWORD}"; fi
 
 echo "Initializing InfluxDB database"
-docker run --rm $ENV_VARS -v $PWD/volumes/influxdb:/var/lib/influxdb influxdb:${INFLUXDB_VERSION} /init-influxdb.sh
+docker run --rm $ENV_VARS \
+  -v $PWD/volumes/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro \
+  -v $PWD/volumes/influxdb:/var/lib/influxdb:rw \
+  influxdb:${INFLUXDB_VERSION} /init-influxdb.sh
