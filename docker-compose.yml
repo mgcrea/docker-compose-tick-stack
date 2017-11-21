@@ -20,8 +20,6 @@ services:
       - VIRTUAL_PORT=8086
       - LETSENCRYPT_HOST=${INFLUXDB_HOST}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
-    ports:
-      - ${INFLUXDB_DB_IP}:${INFLUXDB_DB_PORT}:8086
     volumes:
       - ./volumes/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro
       - ./volumes/influxdb:/var/lib/influxdb:rw
