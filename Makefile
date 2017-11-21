@@ -5,10 +5,7 @@ bash:
 	@docker run --rm --net=host -it influxdb:${INFLUXDB_VERSION} /bin/sh
 
 pull:
-	@docker pull telegraf:${TELEGRAF_VERSION}
-	@docker pull influxdb:${INFLUXDB_VERSION}
-	@docker pull chronograf:${CHRONOGRAF_VERSION}
-	@docker pull kapacitor:${KAPACITOR_VERSION}
+	@bash scripts/pull.sh
 
 build:
-	@bash scripts/buildEnv.sh
+	@bash scripts/build.sh
