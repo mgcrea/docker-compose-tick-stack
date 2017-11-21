@@ -1,0 +1,72 @@
+
+version: '3.3'
+services:
+  telegraf:
+    image: telegraf:${TELEGRAF_VERSION}
+    restart: always
+    container_name: telegraf
+    volumes:
+      - ./volumes/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on:
+      - influxdb
+    network_mode: "service:influxdb"
+
+  influxdb:
+    image: influxdb:${INFLUXDB_VERSION}
+    restart: always
+    container_name: influxdb
+    environment:
+      - VIRTUAL_HOST=${INFLUXDB_HOST}
+      - VIRTUAL_PORT=8086
+      - LETSENCRYPT_HOST=${INFLUXDB_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+    ports:
+      - ${INFLUXDB_DB_IP}:${INFLUXDB_DB_PORT}:8086
+    volumes:
+      - ./volumes/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+      - ./volumes/influxdb:/var/lib/influxdb:rw
+    networks:
+      - influxdb
+      - nginx_proxy
+
+  chronograf:
+    image: chronograf:${CHRONOGRAF_VERSION}
+    restart: always
+    container_name: chronograf
+    environment:
+      - VIRTUAL_HOST=${CHRONOGRAF_HOST}
+      - VIRTUAL_PORT=8888
+      - LETSENCRYPT_HOST=${CHRONOGRAF_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+    volumes:
+      - ./volumes/chronograf:/var/lib/chronograf:rw
+    depends_on:
+      - influxdb
+    networks:
+      - influxdb
+      - nginx_proxy
+    command: --influxdb-url=http://influxdb:8086
+
+  kapacitor:
+    image: kapacitor:${KAPACITOR_VERSION}
+    restart: always
+    container_name: kapacitor
+    environment:
+      - VIRTUAL_HOST=${KAPACITOR_HOST}
+      - VIRTUAL_PORT=9092
+      - LETSENCRYPT_HOST=${KAPACITOR_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+    volumes:
+      - ./volumes/config/kapacitor.conf:/etc/kapacitor/kapacitor.conf:ro
+      - ./volumes/kapacitor:/var/lib/kapacitor:rw
+    depends_on:
+      - influxdb
+    networks:
+      - influxdb
+      - nginx_proxy
+
+networks:
+  influxdb:
+  nginx_proxy:
+    external:
+      name: nginxproxy_default
