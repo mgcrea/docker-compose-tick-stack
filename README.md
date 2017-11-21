@@ -19,7 +19,7 @@ Made to work behind a separate automated [nginx-proxy](https://github.com/jwilde
 - You can quickly start your compose gitlab instance (requires a working automated nginx_proxy compose instance)
 
 ```bash
-git clone git@github.com:mgcrea/docker-compose-tick-stack.git gitlab; cd $_
+git clone git@github.com:mgcrea/docker-compose-tick-stack.git tick_stack; cd $_
 cp .env.default .env; nano .env # edit your variables
 make
 docker-compose up -d
