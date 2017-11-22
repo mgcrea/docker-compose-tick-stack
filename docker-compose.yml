@@ -13,6 +13,7 @@ services:
     networks:
       - influxdb
       - nginx_proxy
+    command: -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
 
   influxdb:
     image: influxdb:${INFLUXDB_VERSION}
