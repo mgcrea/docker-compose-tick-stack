@@ -7,6 +7,7 @@ services:
     container_name: telegraf
     volumes:
       - ./volumes/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ./volumes/config/telegraf.d:/etc/telegraf/telegraf.d:ro
     depends_on:
       - influxdb
     networks:
