@@ -5,6 +5,7 @@ services:
     image: telegraf:${TELEGRAF_VERSION}
     restart: always
     container_name: telegraf
+    hostname: telegraf
     volumes:
       - ./volumes/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - ./volumes/config/telegraf.d:/etc/telegraf/telegraf.d:ro
@@ -19,6 +20,7 @@ services:
     image: influxdb:${INFLUXDB_VERSION}
     restart: always
     container_name: influxdb
+    hostname: influxdb
     environment:
       - VIRTUAL_HOST=${INFLUXDB_HOST}
       - VIRTUAL_PORT=8086
@@ -35,6 +37,7 @@ services:
     image: chronograf:${CHRONOGRAF_VERSION}
     restart: always
     container_name: chronograf
+    hostname: chronograf
     environment:
       - VIRTUAL_HOST=${CHRONOGRAF_HOST}
       - VIRTUAL_PORT=8888
@@ -53,6 +56,7 @@ services:
     image: kapacitor:${KAPACITOR_VERSION}
     restart: always
     container_name: kapacitor
+    hostname: kapacitor
     environment:
       - VIRTUAL_HOST=${KAPACITOR_HOST}
       - VIRTUAL_PORT=9092
