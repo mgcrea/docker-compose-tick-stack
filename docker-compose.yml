@@ -3,23 +3,23 @@ version: '3.3'
 services:
   telegraf:
     image: telegraf:${TELEGRAF_VERSION}
+    command: -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
     restart: always
-    container_name: telegraf
+    container_name: ${CONTAINER_NAME_PREFIX}telegraf
     hostname: telegraf
     volumes:
       - ./volumes/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - ./volumes/config/telegraf.d:/etc/telegraf/telegraf.d:ro
-    depends_on:
+    links:
       - influxdb
     networks:
-      - influxdb
+      - default
       - nginx_proxy
-    command: -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
 
   influxdb:
     image: influxdb:${INFLUXDB_VERSION}
     restart: always
-    container_name: influxdb
+    container_name: ${CONTAINER_NAME_PREFIX}influxdb
     hostname: influxdb
     environment:
       - VIRTUAL_HOST=${INFLUXDB_HOST}
@@ -30,13 +30,13 @@ services:
       - ./volumes/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro
       - ./volumes/influxdb:/var/lib/influxdb:rw
     networks:
-      - influxdb
+      - default
       - nginx_proxy
 
   chronograf:
     image: chronograf:${CHRONOGRAF_VERSION}
     restart: always
-    container_name: chronograf
+    container_name: ${CONTAINER_NAME_PREFIX}chronograf
     hostname: chronograf
     environment:
       - VIRTUAL_HOST=${CHRONOGRAF_HOST}
@@ -51,16 +51,16 @@ services:
       - KAPACITOR_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
     volumes:
       - ./volumes/chronograf:/var/lib/chronograf:rw
-    depends_on:
+    links:
       - influxdb
     networks:
-      - influxdb
+      - default
       - nginx_proxy
 
   kapacitor:
     image: kapacitor:${KAPACITOR_VERSION}
     restart: always
-    container_name: kapacitor
+    container_name: ${CONTAINER_NAME_PREFIX}kapacitor
     hostname: kapacitor
     environment:
       - VIRTUAL_HOST=${KAPACITOR_HOST}
@@ -70,14 +70,13 @@ services:
     volumes:
       - ./volumes/config/kapacitor.conf:/etc/kapacitor/kapacitor.conf:ro
       - ./volumes/kapacitor:/var/lib/kapacitor:rw
-    depends_on:
+    links:
       - influxdb
     networks:
-      - influxdb
+      - default
       - nginx_proxy
 
 networks:
-  influxdb:
   nginx_proxy:
     external:
       name: nginxproxy_default
