@@ -43,6 +43,12 @@ services:
       - VIRTUAL_PORT=8888
       - LETSENCRYPT_HOST=${CHRONOGRAF_HOST}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_USERNAME=${INFLUXDB_ADMIN_USER}
+      - INFLUXDB_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
+      - KAPACITOR_URL=http://kapacitor:9092
+      - KAPACITOR_USERNAME=${INFLUXDB_ADMIN_USER}
+      - KAPACITOR_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
     volumes:
       - ./volumes/chronograf:/var/lib/chronograf:rw
     depends_on:
@@ -50,7 +56,6 @@ services:
     networks:
       - influxdb
       - nginx_proxy
-    command: --influxdb-url=http://influxdb:8086
 
   kapacitor:
     image: kapacitor:${KAPACITOR_VERSION}
