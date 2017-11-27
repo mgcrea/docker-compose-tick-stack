@@ -5,21 +5,20 @@ services:
     image: telegraf:${TELEGRAF_VERSION}
     command: -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
     restart: always
-    container_name: ${CONTAINER_NAME_PREFIX}telegraf
+    container_name: ${SERVICES_NAMESPACE}telegraf
     hostname: telegraf
     volumes:
       - ./volumes/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - ./volumes/config/telegraf.d:/etc/telegraf/telegraf.d:ro
-    links:
+    depends_on:
       - influxdb
     networks:
       - default
-      - nginx_proxy
 
   influxdb:
     image: influxdb:${INFLUXDB_VERSION}
     restart: always
-    container_name: ${CONTAINER_NAME_PREFIX}influxdb
+    container_name: ${SERVICES_NAMESPACE}influxdb
     hostname: influxdb
     environment:
       - VIRTUAL_HOST=${INFLUXDB_HOST}
@@ -30,37 +29,41 @@ services:
       - ./volumes/config/influxdb.conf:/etc/influxdb/influxdb.conf:ro
       - ./volumes/influxdb:/var/lib/influxdb:rw
     networks:
-      - default
-      - nginx_proxy
+      default:
+        aliases:
+         - ${SERVICES_NAMESPACE}influxdb
+      nginx_proxy:
 
   chronograf:
     image: chronograf:${CHRONOGRAF_VERSION}
     restart: always
-    container_name: ${CONTAINER_NAME_PREFIX}chronograf
+    container_name: ${SERVICES_NAMESPACE}chronograf
     hostname: chronograf
     environment:
       - VIRTUAL_HOST=${CHRONOGRAF_HOST}
       - VIRTUAL_PORT=8888
       - LETSENCRYPT_HOST=${CHRONOGRAF_HOST}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
-      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_URL=http://${SERVICES_NAMESPACE}influxdb:8086
       - INFLUXDB_USERNAME=${INFLUXDB_ADMIN_USER}
       - INFLUXDB_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
-      - KAPACITOR_URL=http://kapacitor:9092
+      - KAPACITOR_URL=http://${SERVICES_NAMESPACE}kapacitor:9092
       - KAPACITOR_USERNAME=${INFLUXDB_ADMIN_USER}
       - KAPACITOR_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
     volumes:
       - ./volumes/chronograf:/var/lib/chronograf:rw
-    links:
+    depends_on:
       - influxdb
     networks:
-      - default
-      - nginx_proxy
+      default:
+        aliases:
+         - ${SERVICES_NAMESPACE}chronograf
+      nginx_proxy:
 
   kapacitor:
     image: kapacitor:${KAPACITOR_VERSION}
     restart: always
-    container_name: ${CONTAINER_NAME_PREFIX}kapacitor
+    container_name: ${SERVICES_NAMESPACE}kapacitor
     hostname: kapacitor
     environment:
       - VIRTUAL_HOST=${KAPACITOR_HOST}
@@ -70,11 +73,13 @@ services:
     volumes:
       - ./volumes/config/kapacitor.conf:/etc/kapacitor/kapacitor.conf:ro
       - ./volumes/kapacitor:/var/lib/kapacitor:rw
-    links:
+    depends_on:
       - influxdb
     networks:
-      - default
-      - nginx_proxy
+      default:
+        aliases:
+         - ${SERVICES_NAMESPACE}kapacitor
+      nginx_proxy:
 
 networks:
   nginx_proxy:
