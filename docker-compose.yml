@@ -5,7 +5,7 @@ services:
     image: telegraf:${TELEGRAF_VERSION}
     command: -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
     restart: always
-    container_name: ${SERVICES_NAMESPACE}telegraf
+    container_name: ${CONTAINER_NAMESPACE}telegraf
     hostname: telegraf
     volumes:
       - ./volumes/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
@@ -18,7 +18,7 @@ services:
   influxdb:
     image: influxdb:${INFLUXDB_VERSION}
     restart: always
-    container_name: ${SERVICES_NAMESPACE}influxdb
+    container_name: ${CONTAINER_NAMESPACE}influxdb
     hostname: influxdb
     environment:
       - VIRTUAL_HOST=${INFLUXDB_HOST}
@@ -31,23 +31,23 @@ services:
     networks:
       default:
         aliases:
-         - ${SERVICES_NAMESPACE}influxdb
+         - ${CONTAINER_NAMESPACE}influxdb
       nginx_proxy:
 
   chronograf:
     image: chronograf:${CHRONOGRAF_VERSION}
     restart: always
-    container_name: ${SERVICES_NAMESPACE}chronograf
+    container_name: ${CONTAINER_NAMESPACE}chronograf
     hostname: chronograf
     environment:
       - VIRTUAL_HOST=${CHRONOGRAF_HOST}
       - VIRTUAL_PORT=8888
       - LETSENCRYPT_HOST=${CHRONOGRAF_HOST}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
-      - INFLUXDB_URL=http://${SERVICES_NAMESPACE}influxdb:8086
+      - INFLUXDB_URL=http://${CONTAINER_NAMESPACE}influxdb:8086
       - INFLUXDB_USERNAME=${INFLUXDB_ADMIN_USER}
       - INFLUXDB_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
-      - KAPACITOR_URL=http://${SERVICES_NAMESPACE}kapacitor:9092
+      - KAPACITOR_URL=http://${CONTAINER_NAMESPACE}kapacitor:9092
       - KAPACITOR_USERNAME=${INFLUXDB_ADMIN_USER}
       - KAPACITOR_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
     volumes:
@@ -57,13 +57,13 @@ services:
     networks:
       default:
         aliases:
-         - ${SERVICES_NAMESPACE}chronograf
+         - ${CONTAINER_NAMESPACE}chronograf
       nginx_proxy:
 
   kapacitor:
     image: kapacitor:${KAPACITOR_VERSION}
     restart: always
-    container_name: ${SERVICES_NAMESPACE}kapacitor
+    container_name: ${CONTAINER_NAMESPACE}kapacitor
     hostname: kapacitor
     environment:
       - VIRTUAL_HOST=${KAPACITOR_HOST}
@@ -78,7 +78,7 @@ services:
     networks:
       default:
         aliases:
-         - ${SERVICES_NAMESPACE}kapacitor
+         - ${CONTAINER_NAMESPACE}kapacitor
       nginx_proxy:
 
 networks:
