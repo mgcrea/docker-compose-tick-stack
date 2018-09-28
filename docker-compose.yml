@@ -2,7 +2,7 @@
 version: '3.3'
 services:
   telegraf:
-    image: telegraf:1.6-alpine
+    image: telegraf:${TELEGRAF_VERSION}
     command: -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d
     restart: always
     container_name: ${CONTAINER_NAMESPACE}telegraf
@@ -16,7 +16,7 @@ services:
       - default
 
   influxdb:
-    image: influxdb:1.5-alpine
+    image: influxdb:${INFLUXDB_VERSION}
     restart: always
     container_name: ${CONTAINER_NAMESPACE}influxdb
     hostname: influxdb
@@ -35,7 +35,7 @@ services:
       nginx_proxy:
 
   chronograf:
-    image: chronograf:1.5-alpine
+    image: chronograf:${CHRONOGRAF_VERSION}
     restart: always
     container_name: ${CONTAINER_NAMESPACE}chronograf
     hostname: chronograf
@@ -61,7 +61,7 @@ services:
       nginx_proxy:
 
   kapacitor:
-    image: kapacitor:1.5-alpine
+    image: kapacitor:${KAPACITOR_VERSION}
     restart: always
     container_name: ${CONTAINER_NAMESPACE}kapacitor
     hostname: kapacitor

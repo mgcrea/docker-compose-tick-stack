@@ -14,6 +14,29 @@ Working `docker-compose.yml` for official [influxdata](https://www.influxdata.co
 
 Made to work behind a separate automated [nginx-proxy](https://github.com/jwilder/nginx-proxy) with SSL support via letsencrypt.
 
+## Docs
+
+- [telegraf](https://docs.influxdata.com/telegraf/v1.8/administration/configuration/)
+- [influxdb](https://docs.influxdata.com/influxdb/v1.6/administration/config/)
+
+## Configuration
+
+- [telegraf](https://github.com/influxdata/telegraf/blob/release-1.8/etc/telegraf.conf)
+
+Generate an up-to-date sample telegraf config
+
+```bash
+bash scripts/bash.sh telegraf "telegraf config" > /tmp/telegraf.conf
+```
+
+- [influxdb](https://raw.githubusercontent.com/influxdata/influxdb/1.6/etc/config.sample.toml)
+
+Generate an up-to-date sample telegraf config
+
+```bash
+bash scripts/bash.sh influxdb "influxd config" > /tmp/influxd.conf
+```
+
 ## Quickstart
 
 - You can quickly start your compose gitlab instance (requires a working automated nginx_proxy compose instance)

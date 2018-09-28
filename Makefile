@@ -1,7 +1,9 @@
+SHELL := /bin/bash
+
 all: build
 
-exec:
-	@docker-compose exec influxdb /bin/sh
+bash:
+	@bash scripts/bash.sh influxdb
 
 pull:
 	@bash scripts/pull.sh

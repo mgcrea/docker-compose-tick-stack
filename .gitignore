@@ -1,4 +1,5 @@
 volumes/
+.history/
 .idea/
 .env
 .remote-sync.json
