@@ -18,6 +18,7 @@ Made to work behind a separate automated [nginx-proxy](https://github.com/jwilde
 
 - [telegraf](https://docs.influxdata.com/telegraf/v1.8/administration/configuration/)
 - [influxdb](https://docs.influxdata.com/influxdb/v1.6/administration/config/)
+- [kapacitor](https://docs.influxdata.com/kapacitor/v1.5/administration/configuration/)
 
 ## Configuration
 
@@ -35,6 +36,14 @@ Generate an up-to-date sample telegraf config
 
 ```bash
 bash scripts/bash.sh influxdb "influxd config" > /tmp/influxd.conf
+```
+
+- [influxdb](https://raw.githubusercontent.com/influxdata/influxdb/1.6/etc/config.sample.toml)
+
+Generate an up-to-date sample kapacitor config
+
+```bash
+bash scripts/bash.sh kapacitor "kapacitord config" > /tmp/kapacitord.conf
 ```
 
 ## Quickstart

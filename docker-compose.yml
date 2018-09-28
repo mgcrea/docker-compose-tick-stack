@@ -1,4 +1,3 @@
-
 version: '3.3'
 services:
   telegraf:
@@ -84,4 +83,4 @@ services:
 networks:
   nginx_proxy:
     external:
-      name: nginxproxy_default
+      name: nginx_proxy_default
